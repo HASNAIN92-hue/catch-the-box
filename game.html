@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <title>Catch the Box - HASNAIN MAKRANI</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: lightgreen;
+            text-align: center;
+            font-family: Arial, sans-serif;
+        }
+
+        /* =========================
+           INTRO SCREEN
+        ========================= */
+
+        #intro {
+            position: fixed;
+            top: 0;
+            left: 0;
+
+            width: 100%;
+            height: 100vh;
+
+            background: black;
+
+            display: flex;
+            flex-direction: column;
+
+            justify-content: center;
+            align-items: center;
+
+            z-index: 9999;
+
+            transition: opacity 0.7s ease;
+        }
+
+        #madeBy {
+            color: white;
+            font-size: 38px;
+            font-weight: normal;
+
+            opacity: 0;
+
+            animation: fadeIn 1.5s ease 0.3s forwards;
+        }
+
+        #creatorName {
+            color: white;
+
+            font-size: 48px;
+            font-weight: bold;
+
+            margin-top: 15px;
+
+            letter-spacing: 3px;
+
+            opacity: 0;
+
+            animation: fadeIn 1.5s ease 1.2s forwards;
+        }
+
+        #introStart {
+            position: absolute;
+
+            bottom: 30px;
+
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            background: white;
+            color: black;
+
+            border: none;
+
+            border-radius: 8px;
+
+            padding: 12px 35px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            opacity: 0;
+
+            animation: buttonAppear 1s ease 2.2s forwards;
+        }
+
+        #introStart:hover {
+            background: #eeeeee;
+        }
+
+        @keyframes fadeIn {
+
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+        }
+
+        @keyframes buttonAppear {
+
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+
+        }
+
+
+        /* =========================
+           GAME CONTENT
+        ========================= */
+
+        #gameContent {
+            display: none;
+        }
+
+        h1 {
+            color: darkgreen;
+            margin-top: 25px;
+        }
+
+        #settings {
+            margin: 15px;
+
+            font-size: 20px;
+
+            font-weight: bold;
+        }
+
+        #timerSelect {
+            font-size: 18px;
+
+            padding: 8px;
+
+            border-radius: 6px;
+
+            border: 2px solid darkgreen;
+        }
+
+
+        /* =========================
+           SCORE + TIMER
+        ========================= */
+
+        #info {
+            font-size: 24px;
+
+            font-weight: bold;
+
+            margin: 15px;
+        }
+
+
+        /* गोल RESTART BUTTON */
+
+        #timerRestart {
+
+            width: 34px;
+            height: 34px;
+
+            padding: 0;
+
+            margin: 0 0 0 6px;
+
+            border-radius: 50%;
+
+            background: darkgreen;
+
+            color: white;
+
+            border: none;
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            vertical-align: middle;
+
+            display: none;
+
+            line-height: 34px;
+
+            transition: 0.2s;
+        }
+
+        #timerRestart:hover {
+
+            transform: rotate(-30deg) scale(1.08);
+        }
+
+
+        /* =========================
+           GAME BOX
+        ========================= */
+
+        #game {
+
+            width: 600px;
+
+            height: 400px;
+
+            background: lightyellow;
+
+            border: 3px solid darkgreen;
+
+            margin: 20px auto;
+
+            position: relative;
+
+            overflow: hidden;
+        }
+
+
+        #box {
+
+            width: 50px;
+            height: 50px;
+
+            background: green;
+
+            position: absolute;
+
+            left: 275px;
+            top: 175px;
+
+            cursor: pointer;
+
+            border-radius: 8px;
+
+            transition:
+                width 0.15s,
+                height 0.15s;
+
+            display: none;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        button {
+
+            font-size: 18px;
+
+            padding: 10px 22px;
+
+            cursor: pointer;
+
+            border: none;
+
+            border-radius: 8px;
+
+            background: darkgreen;
+
+            color: white;
+
+            margin: 8px;
+        }
+
+
+        /* Game के अंदर वाला Start Button */
+
+        #startGameButton {
+
+            display: inline-block;
+        }
+
+
+        /* Game Over Restart */
+
+        #restart {
+
+            display: none;
+        }
+
+
+        #gameOver {
+
+            font-size: 30px;
+
+            color: darkgreen;
+
+            font-weight: bold;
+
+            display: none;
+
+            margin: 15px;
+        }
+
+
+        #message {
+
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin: 10px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 700px) {
+
+            #game {
+
+                width: 90%;
+
+                height: 400px;
+            }
+
+            #creatorName {
+
+                font-size: 30px;
+
+                letter-spacing: 2px;
+            }
+
+            #madeBy {
+
+                font-size: 30px;
+            }
+
+            #introStart {
+
+                bottom: 25px;
+
+                font-size: 18px;
+
+                padding: 11px 30px;
+            }
+
+            #info {
+
+                font-size: 20px;
+            }
+
+            #timerRestart {
+
+                width: 32px;
+
+                height: 32px;
+
+                font-size: 19px;
+
+                line-height: 32px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================
+         INTRO SCREEN
+    ========================= -->
+
+    <div id="intro">
+
+        <div id="madeBy">
+            Made by
+        </div>
+
+        <div id="creatorName">
+            HASNAIN MAKRANI
+        </div>
+
+        <button
+            id="introStart"
+            onclick="openGame()">
+
+            ▶️ Start Game
+
+        </button>
+
+    </div>
+
+
+
+    <!-- =========================
+         GAME CONTENT
+    ========================= -->
+
+    <div id="gameContent">
+
+
+        <h1>
+            🎮 Catch the Box
+        </h1>
+
+
+        <!-- TIME SELECT -->
+
+        <div id="settings">
+
+            ⏱️ Select Game Time:
+
+            <select id="timerSelect">
+
+                <option value="30">
+                    30 Seconds
+                </option>
+
+                <option value="40">
+                    40 Seconds
+                </option>
+
+                <option value="50">
+                    50 Seconds
+                </option>
+
+                <option value="60">
+                    1 Minute
+                </option>
+
+            </select>
+
+        </div>
+
+
+
+        <!-- SCORE / BEST / TIMER -->
+
+        <div id="info">
+
+            Score:
+            <span id="score">0</span>
+
+            &nbsp; | &nbsp;
+
+            Best:
+            <span id="highScore">0</span>
+
+            &nbsp; | &nbsp;
+
+            Time:
+            <span id="time">30</span>
+
+
+            <!-- TIMER RESTART -->
+
+            <button
+                id="timerRestart"
+                onclick="quickRestart()"
+                title="Restart Game">
+
+                ↻
+
+            </button>
+
+        </div>
+
+
+
+        <!-- GAME AREA -->
+
+        <div id="game">
+
+            <div id="box"></div>
+
+        </div>
+
+
+
+        <!-- MESSAGE -->
+
+        <div id="message">
+
+            पहले अपना Time चुनें और Start Game दबाएँ।
+
+        </div>
+
+
+
+        <!-- START GAME -->
+
+        <button
+            id="startGameButton"
+            onclick="startGame()">
+
+            ▶️ Start Game
+
+        </button>
+
+
+
+        <!-- GAME OVER RESTART -->
+
+        <button
+            id="restart"
+            onclick="restartGame()">
+
+            🔄 Restart Game
+
+        </button>
+
+
+
+        <!-- GAME OVER -->
+
+        <div id="gameOver">
+
+            ⏰ Game Over!
+
+        </div>
+
+
+    </div>
+
+
+
+    <script>
+
+
+        /* =========================
+           VARIABLES
+        ========================= */
+
+        let score = 0;
+
+        let highScore = 0;
+
+        let time = 30;
+
+        let selectedTime = 30;
+
+        let gameRunning = false;
+
+        let timer;
+
+
+        const box =
+            document.getElementById("box");
+
+
+        const game =
+            document.getElementById("game");
+
+
+        const timerSelect =
+            document.getElementById("timerSelect");
+
+
+        const timerRestart =
+            document.getElementById("timerRestart");
+
+
+
+        /* =========================
+           OPEN GAME AFTER INTRO
+        ========================= */
+
+        function openGame() {
+
+            document.getElementById("intro").style.opacity =
+                "0";
+
+
+            setTimeout(function() {
+
+                document.getElementById("intro").style.display =
+                    "none";
+
+
+                document.getElementById("gameContent").style.display =
+                    "block";
+
+
+            }, 700);
+
+        }
+
+
+
+        /* =========================
+           TIME SELECT
+        ========================= */
+
+        timerSelect.onchange = function() {
+
+            if (!gameRunning) {
+
+                selectedTime =
+                    Number(timerSelect.value);
+
+
+                document.getElementById("time").innerText =
+                    selectedTime;
+
+            }
+
+        };
+
+
+
+        /* =========================
+           MOVE BOX
+        ========================= */
+
+        function moveBox() {
+
+            let maxX =
+                game.clientWidth -
+                box.clientWidth;
+
+
+            let maxY =
+                game.clientHeight -
+                box.clientHeight;
+
+
+            let randomX =
+                Math.floor(
+                    Math.random() * maxX
+                );
+
+
+            let randomY =
+                Math.floor(
+                    Math.random() * maxY
+                );
+
+
+            box.style.left =
+                randomX + "px";
+
+
+            box.style.top =
+                randomY + "px";
+
+        }
+
+
+
+        /* =========================
+           DIFFICULTY
+        ========================= */
+
+        function increaseDifficulty() {
+
+            let newSize =
+                Math.max(20, 50 - score);
+
+
+            box.style.width =
+                newSize + "px";
+
+
+            box.style.height =
+                newSize + "px";
+
+        }
+
+
+
+        /* =========================
+           BOX CLICK
+        ========================= */
+
+        box.onclick = function() {
+
+            if (gameRunning) {
+
+                score++;
+
+
+                document.getElementById("score").innerText =
+                    score;
+
+
+                if (score > highScore) {
+
+                    highScore =
+                        score;
+
+
+                    document.getElementById("highScore").innerText =
+                        highScore;
+
+                }
+
+
+                increaseDifficulty();
+
+
+                moveBox();
+
+            }
+
+        };
+
+
+
+        /* =========================
+           START GAME
+        ========================= */
+
+        function startGame() {
+
+            selectedTime =
+                Number(timerSelect.value);
+
+
+            score = 0;
+
+            time = selectedTime;
+
+            gameRunning = true;
+
+
+            document.getElementById("score").innerText =
+                "0";
+
+
+            document.getElementById("time").innerText =
+                time;
+
+
+            box.style.width =
+                "50px";
+
+
+            box.style.height =
+                "50px";
+
+
+            box.style.display =
+                "block";
+
+
+            document.getElementById("startGameButton").style.display =
+                "none";
+
+
+            document.getElementById("restart").style.display =
+                "none";
+
+
+            document.getElementById("gameOver").style.display =
+                "none";
+
+
+            document.getElementById("message").innerText =
+                "🎯 जल्दी से Box पर Click करो!";
+
+
+            timerSelect.disabled =
+                true;
+
+
+            timerRestart.style.display =
+                "inline-block";
+
+
+            moveBox();
+
+
+            startTimer();
+
+        }
+
+
+
+        /* =========================
+           TIMER
+        ========================= */
+
+        function startTimer() {
+
+            clearInterval(timer);
+
+
+            timer = setInterval(function() {
+
+                time--;
+
+
+                document.getElementById("time").innerText =
+                    time;
+
+
+                if (time <= 0) {
+
+                    clearInterval(timer);
+
+
+                    gameRunning =
+                        false;
+
+
+                    box.style.display =
+                        "none";
+
+
+                    timerRestart.style.display =
+                        "none";
+
+
+                    document.getElementById("gameOver").style.display =
+                        "block";
+
+
+                    document.getElementById("restart").style.display =
+                        "inline-block";
+
+
+                    document.getElementById("message").innerText =
+                        "🏆 आपका Score: " + score;
+
+
+                    timerSelect.disabled =
+                        false;
+
+                }
+
+            }, 1000);
+
+        }
+
+
+
+        /* =========================
+           QUICK RESTART
+           TIMER के पास वाला गोल BUTTON
+        ========================= */
+
+        function quickRestart() {
+
+            if (gameRunning) {
+
+                clearInterval(timer);
+
+
+                score = 0;
+
+                time =
+                    Number(timerSelect.value);
+
+
+                document.getElementById("score").innerText =
+                    "0";
+
+
+                document.getElementById("time").innerText =
+                    time;
+
+
+                box.style.width =
+                    "50px";
+
+
+                box.style.height =
+                    "50px";
+
+
+                box.style.display =
+                    "block";
+
+
+                document.getElementById("message").innerText =
+                    "🎯 जल्दी से Box पर Click करो!";
+
+
+                moveBox();
+
+
+                startTimer();
+
+            }
+
+        }
+
+
+
+        /* =========================
+           GAME OVER RESTART
+        ========================= */
+
+        function restartGame() {
+
+            clearInterval(timer);
+
+
+            score = 0;
+
+
+            time =
+                Number(timerSelect.value);
+
+
+            gameRunning =
+                false;
+
+
+            document.getElementById("score").innerText =
+                "0";
+
+
+            document.getElementById("time").innerText =
+                time;
+
+
+            box.style.width =
+                "50px";
+
+
+            box.style.height =
+                "50px";
+
+
+            box.style.display =
+                "none";
+
+
+            document.getElementById("gameOver").style.display =
+                "none";
+
+
+            document.getElementById("restart").style.display =
+                "none";
+
+
+            document.getElementById("startGameButton").style.display =
+                "inline-block";
+
+
+            document.getElementById("message").innerText =
+                "अब नया Time चुनें और Start Game दबाएँ।";
+
+
+            timerSelect.disabled =
+                false;
+
+
+            timerRestart.style.display =
+                "none";
+
+        }
+
+    </script>
+
+
+</body>
+</html>
